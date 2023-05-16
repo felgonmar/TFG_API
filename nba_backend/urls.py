@@ -16,11 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from . import views
+from . import views, players_functions, teams_functions
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('teams/',  views.team_list, name='team_list'),
-    path('teams/<int:team_id>/players/', views.team_players, name='team_players'),
-    path('player_stats/<int:player_id>/', views.player_stats, name='player_stats')
+    #Teams url
+    path('teams/',  teams_functions.team_list, name='team_list'),
+    path('teams/<int:team_id>/players/', teams_functions.team_players, name='team_players'),
+    #players url
+    path('playerStats/<int:player_id>/', players_functions.player_stats, name='player_stats'),
+    path('playerCompare/<int:player_id>/<int:vs_player_id>', players_functions.playerCompare, name='player_compare'),
+    path('playerCommonInfo/<int:player_id>/', players_functions.player_common_info, name='player_common_info')
 ]
