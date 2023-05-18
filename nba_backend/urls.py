@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from . import views, players_functions, teams_functions
+from . import views, players_functions, teams_functions, seasons
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,5 +26,9 @@ urlpatterns = [
     #players url
     path('playerStats/<int:player_id>/', players_functions.player_stats, name='player_stats'),
     path('playerCompare/<int:player_id>/<int:vs_player_id>', players_functions.playerCompare, name='player_compare'),
-    path('playerCommonInfo/<int:player_id>/', players_functions.player_common_info, name='player_common_info')
+    path('playerCommonInfo/<int:player_id>/', players_functions.player_common_info, name='player_common_info'),
+    path('playerAdvancedStats/<int:player_id>', players_functions.get_advanced_stats, name='player_advanced_stats'),
+    #Seasons
+    path('standings', seasons.get_standings, name='standings'),
+    path('conferenceStandings', seasons.get_conference_standings, name='conference_standings')
 ]
