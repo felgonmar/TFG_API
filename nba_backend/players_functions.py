@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from nba_api.stats.static import teams
-from nba_api.stats.endpoints import commonplayerinfo,playercareerstats, playercompare, playerdashboardbygeneralsplits, leaguedashplayerstats
+from nba_api.stats.endpoints import commonplayerinfo,playercareerstats, playercompare, playerdashboardbygeneralsplits, playergamelog, boxscoretraditionalv2
 from nba_api.stats.library.parameters import SeasonAll
 from json import JSONDecodeError
 from . import utils
@@ -18,18 +18,6 @@ def player_stats(request, player_id):
     try:
         career = playercareerstats.PlayerCareerStats(player_id=player_id).get_normalized_dict() #['resultSets']
         print(career)
-        # player_stats ={}
-        # for category in career:
-        #     name = category['name']
-        #     headers = category['headers']
-        #     stats= {}
-        #     for season in category['rowSet']:
-        #         season_dict = (dict(zip(headers,season)))
-        #         if 'SEASON_ID' in season_dict:
-        #             stats[season_dict['SEASON_ID']]= season_dict
-        #         else:
-        #             stats['TOTAL']=season_dict
-        #     player_stats[name] = stats
         return JsonResponse(career)           
 
     except JSONDecodeError:
@@ -38,13 +26,22 @@ def player_stats(request, player_id):
     
 def get_advanced_stats(request,player_id):
     try:
-        player_dashboard = playerdashboardbygeneralsplits.PlayerDashboardByGeneralSplits(player_id).get_normalized_dict()
-        get_off_rat(player_id)
+        season_id = request.GET.get('seasonId', SeasonAll.default)
+        player_dashboard = playerdashboardbygeneralsplits.PlayerDashboardByGeneralSplits(player_id, season=season_id).get_normalized_dict()
+       
         for key in player_dashboard:
             print(key)
             for item in player_dashboard[key]:
                 print(item)
+                get_efg(player_stats)
+                #def rat is a dense call, only for the first one
+                if key == 'OverallPlayerDashboard':
+                    player_dashboard[key][player_dashboard[key].index(item)]['OFF_RAT'] =get_off_rat(player_dashboard[key][player_dashboard[key].index(item)])
+                    player_dashboard[key][player_dashboard[key].index(item)]['DEF_RAT'] =get_def_rat(player_dashboard[key][player_dashboard[key].index(item)], player_id, season_id)
+                    player_dashboard[key][player_dashboard[key].index(item)]['NET_RAT'] = player_dashboard[key][player_dashboard[key].index(item)]['OFF_RAT'] - player_dashboard[key][player_dashboard[key].index(item)]['DEF_RAT']
                 player_dashboard[key][player_dashboard[key].index(item)]['PER']= get_per(player_dashboard[key][player_dashboard[key].index(item)])
+                player_dashboard[key][player_dashboard[key].index(item)]['EFG'] = get_efg(player_dashboard[key][player_dashboard[key].index(item)])
+                player_dashboard[key][player_dashboard[key].index(item)]['TS']=get_ts(player_dashboard[key][player_dashboard[key].index(item)])
         
     except JSONDecodeError:
         return JsonResponse({'error':'Invalid player or season'}, status=400)   
@@ -87,7 +84,7 @@ def get_per(player_data):
 
     return per
 
-#not like this
+#TODO:
 def get_win_shares(player_data):
     """
     Calculate the simplified Win Shares based on the given player data.
@@ -110,55 +107,90 @@ def get_win_shares(player_data):
 
     return ws
 
-#TODO:
-#def get_efg effective Field Goal percentage (FG + 0.5 * 3P) / FGA.
-#def get_ts True Shooting Percentage  PTS / (2 * TSA). TSA= todos los tiros intentados (3pt, 2pt, FT)
-# def get_off_rat(player_id, season_id='22021'):
-#     from nba_api.stats.endpoints import playerdashboardbygeneralsplits
 
-#     player_dashboard = playerdashboardbygeneralsplits.PlayerDashboardByGeneralSplits(player_id, season=season_id)
-#     player_dashboard_dict = player_dashboard.get_dict()
+def get_efg(player_stats): # effective Field Goal percentage (FG + 0.5 * 3P) / FGA.
+    fg = player_stats['FGM']
+    fg3 = player_stats['FG3M']  # Three-Point Field Goals Made
+    fga = player_stats['FGA']  # Field Goal Attempts
 
-#     result_sets = player_dashboard_dict['resultSets']
+    efg = (fg + 0.5 * fg3) / fga
 
-#     for result_set in result_sets:
-#         if result_set['name'] == 'OverallPlayerDashboard':
-#             headers = result_set['headers']
-#             rows = result_set['rowSet']
-
-#             # Extract the player's data
-#             player_data = dict(zip(headers, rows[0]))
-
-#             # The number of possessions a player uses can be approximated by the sum of field goal attempts,
-#             # turnovers, and 0.44 times free throw attempts (to account for possessions ending in free throws)
-#             possessions = player_data['FGA'] + player_data['TO'] + 0.44 * player_data['FTA']
-
-#             # Calculate the offensive rating
-#             off_rat = 100 * player_data['PTS'] / possessions
-
-#             return off_rat
+    return efg
 
 
 
+def get_ts(player_stats): # True Shooting Percentage  PTS / (2 * TSA). TSA= todos los tiros intentados (3pt, 2pt, FT). tsa = FGA + 0.44 * FTA.
+    pts = player_stats['PTS']  # Points
+    fga = player_stats['FGA']  # Field Goal Attempts
+    fta = player_stats['FTA']  # Free Throw Attempts
 
-# def get_off_rat(player_id, season): Offensive Rating = (Pts + Ast + FG + (0.5 * 3P)) / (FGA + (0.44 * FTA) + Ast + TO)
+    ts = pts / (2 * (fga + 0.44 * fta))
 
-#     player_stats = playerdashboardbygeneralsplits.PlayerDashboardByGeneralSplits(player_id, season=season)
-#     player_stats_dict = player_stats.get_normalized_dict()
-#     player_overall_stats = player_stats_dict['OverallPlayerDashboard'][0]
+    return ts
+
+def get_off_rat(player_stats):# Offensive Rating = (Pts + Ast + FG + (0.5 * 3P)) / (FGA + (0.44 * FTA) + Ast + TO)
     
-#     Pts = player_overall_stats['PTS']
-#     Ast = player_overall_stats['AST']
-#     FG = player_overall_stats['FGM']
-#     ThreeP = player_overall_stats['FG3M']
-#     FGA = player_overall_stats['FGA']
-#     FTA = player_overall_stats['FTA']
-#     TO = player_overall_stats['TOV']
+    Pts = player_stats['PTS']
+    Ast = player_stats['AST']
+    FG = player_stats['FGM']
+    ThreeP = player_stats['FG3M']
+    FGA = player_stats['FGA']
+    FTA = player_stats['FTA']
+    TO = player_stats['TOV']
     
-#     if (FGA + (0.44 * FTA) + Ast + TO) != 0:
-#         Off_Rating = (Pts + Ast + FG + (0.5 * ThreeP)) / (FGA + (0.44 * FTA) + Ast + TO)
-#         return Off_Rating * 100
-#     else:
-#         return None
-#def get_def_rat
-#def get_net_rat (off_rat - def_rat)
+    if (FGA + (0.44 * FTA) + Ast + TO) != 0:
+        Off_Rating = (Pts + Ast + FG + (0.5 * ThreeP)) / (FGA + (0.44 * FTA) + Ast + TO)
+        return Off_Rating * 100
+    else:
+        return 0
+def get_def_rat(player_stats, player_id, season_id): #Defensive Rating = 100 * (Opponent Points / (Opponent FGA + (0.44 * Opponent FTA) + Opponent TOV)) - 0.5 * (Steals + Blocks) / (Opponent FGA + (0.44 * Opponent FTA) + Opponent TOV)
+    
+    opponent_stats = get_opponent_stats(player_id,season_id)
+    opponent_points = opponent_stats['PTS']
+    opponent_fga = opponent_stats['FGA']
+    opponent_fta = opponent_stats['FTA']
+    opponent_tov = opponent_stats['TOV']
+    player_steals = player_stats['STL']
+    player_blocks = player_stats['BLK']
+
+    if (opponent_fga + 0.44 * opponent_fta - opponent_tov) != 0:
+        defensive_rating = 100 * (opponent_points / (opponent_fga + 0.44 * opponent_fta - opponent_tov)) - 0.5 * (player_steals + player_blocks) / (opponent_fga + 0.44 * opponent_fta - opponent_tov)
+
+        return defensive_rating
+    else:
+        return 0
+
+
+
+def get_opponent_stats(player_id, season):
+    # Obtén todos los juegos del jugador en una temporada
+    gamelog = playergamelog.PlayerGameLog(player_id, season)
+    games = gamelog.get_data_frames()[0]
+    
+    opponent_stats = {'PTS': 0, 'FGA': 0, 'FTA': 0, 'TOV': 0}
+
+    # Para cada juego, obtén las estadísticas del equipo oponente
+    for i in range(len(games)):
+        game_id = games['Game_ID'][i]
+        matchup = games['MATCHUP'][i]
+
+        # Dividir la cadena de emparejamiento para obtener los equipos
+        teams = matchup.split(' ')
+        if teams[1] == 'vs.':
+            opponent_team_abbreviation = teams[2]
+        else: # El jugador está jugando fuera, por lo que el oponente es el primer equipo
+            opponent_team_abbreviation = teams[0]
+
+        boxscore = boxscoretraditionalv2.BoxScoreTraditionalV2(game_id)
+        team_stats = boxscore.get_data_frames()[1]
+
+        # Identifica qué fila de team_stats corresponde al equipo oponente
+        opponent_row = team_stats[team_stats['TEAM_ABBREVIATION'] == opponent_team_abbreviation]
+
+        # Suma las estadísticas del equipo oponente a las totales
+        opponent_stats['PTS'] += opponent_row['PTS'].values[0]
+        opponent_stats['FGA'] += opponent_row['FGA'].values[0]
+        opponent_stats['FTA'] += opponent_row['FTA'].values[0]
+        opponent_stats['TOV'] += opponent_row['TO'].values[0]
+        
+    return opponent_stats
