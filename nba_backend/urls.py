@@ -16,7 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from . import views, players_functions, teams_functions, seasons
+from . import views, players_functions, teams_functions, seasons, user
+from .rating import RatingListView,CreateRatingView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,5 +31,12 @@ urlpatterns = [
     path('playerAdvancedStats/<int:player_id>', players_functions.get_advanced_stats, name='player_advanced_stats'),
     #Seasons
     path('standings', seasons.get_standings, name='standings'),
-    path('conferenceStandings', seasons.get_conference_standings, name='conference_standings')
+    path('conferenceStandings', seasons.get_conference_standings, name='conference_standings'),
+    #User
+    path('register/', user.register, name='register'), #post
+    path('login/', user.login, name='login'), #post
+    path('logout/', user.log_out, name='logout'),
+    #rating
+     path('ratings/', RatingListView.as_view(), name='ratings_list'),
+     path('create-rating/', CreateRatingView.as_view(), name='create_rating'), #post
 ]
