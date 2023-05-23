@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from nba_api.stats.static import teams
+from nba_api.stats.static import teams, players
 from nba_api.stats.endpoints import commonplayerinfo,playercareerstats, playercompare, playerdashboardbygeneralsplits, playergamelog, boxscoretraditionalv2
 from nba_api.stats.library.parameters import SeasonAll
 from json import JSONDecodeError
@@ -8,7 +8,7 @@ from . import utils
 
 def player_common_info(request, player_id):
     try:
-        info = commonplayerinfo.CommonPlayerInfo(player_id).get_normalized_dict()
+        info = get_common_player_info(player_id)
         print(info)
         return JsonResponse(info)
     except JSONDecodeError:
@@ -61,6 +61,21 @@ def playerCompare(request, player_id, vs_player_id):
     except JSONDecodeError:
         return JsonResponse({'error': 'Invalid player id'}, status=400)
     
+    
+
+#player finder for only active players and for more than 3 chars
+def playerFinder(request,name):
+    try:
+        if len(name) <3:
+            return JsonResponse({'error': 'name has to be at least 3 chars lenght'}, status=400)
+        else:
+            p1= players.find_players_by_full_name(name)
+            active_players = [player for player in p1 if player['is_active']]
+            for player in active_players:
+                player['commonPlayerInfo']=get_common_player_info(player['id'])['CommonPlayerInfo'][0]
+            return JsonResponse({'players': active_players})
+    except JSONDecodeError as e:
+        return JsonResponse({'error': e}, status=400)
     
 def get_per(player_data):
     """
@@ -191,3 +206,11 @@ def get_opponent_stats(player_id, season):
         opponent_stats['TOV'] += opponent_row['TO'].values[0]
         
     return opponent_stats
+
+
+def get_common_player_info(player_id):
+    try:
+        info = commonplayerinfo.CommonPlayerInfo(player_id).get_normalized_dict()
+        return info
+    except:
+        KeyError('Invalid player_id')

@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from . import views, players_functions, teams_functions, seasons, user
+from . import views, players_functions, teams_functions, seasons, user, games, news
 from .rating import RatingListView,CreateRatingView
 
 urlpatterns = [
@@ -29,6 +29,7 @@ urlpatterns = [
     path('playerCompare/<int:player_id>/<int:vs_player_id>', players_functions.playerCompare, name='player_compare'),
     path('playerCommonInfo/<int:player_id>/', players_functions.player_common_info, name='player_common_info'),
     path('playerAdvancedStats/<int:player_id>', players_functions.get_advanced_stats, name='player_advanced_stats'),
+    path('playerFinder/<str:name>', players_functions.playerFinder, name='player_finder'),
     #Seasons
     path('standings', seasons.get_standings, name='standings'),
     path('conferenceStandings', seasons.get_conference_standings, name='conference_standings'),
@@ -37,6 +38,11 @@ urlpatterns = [
     path('login/', user.login, name='login'), #post
     path('logout/', user.log_out, name='logout'),
     #rating
-     path('ratings/', RatingListView.as_view(), name='ratings_list'),
-     path('create-rating/', CreateRatingView.as_view(), name='create_rating'), #post
+    path('ratings/', RatingListView.as_view, name='ratings_list'),
+    path('create-rating/', CreateRatingView.as_view, name='create_rating'), #post
+    #games
+    path('gamesByDate',games.get_games_by_date, name='gamesDate'),
+    path('game/<str:game_id>/', games.get_game_details, name='game'),
+    #news
+    path('news', news.get_news, name="news"),
 ]
