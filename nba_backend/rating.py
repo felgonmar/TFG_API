@@ -4,25 +4,26 @@ from .models import Rating, User
 from django.http import JsonResponse
 from django.forms.models import model_to_dict
 
-
+from django.views.decorators.csrf import csrf_exempt
+@csrf_exempt
 def rate(request):
-    user_id = request.data.get('user_id')
-    game_id = request.data.get('game_id', None)
-    player_id = request.data.get('player_id', None)
-    team_id = request.data.get('team_id', None)
-    rating_value = request.data.get('rating')
+    user_id = request.POST.get('user_id')
+    game_id = request.POST.get('game_id', None)
+    player_id = request.POST.get('player_id', None)
+    team_id = request.POST.get('team_id', None)
+    rating_value = request.POST.get('rating')
 
     if sum([bool(game_id), bool(player_id), bool(team_id)]) != 1:
-        return Response({"error": "Debe calificar a un juego, jugador o equipo, pero no a más de uno al mismo tiempo."}, status=400)
+        return JsonResponse({"error": "You must rate a game, player or team, but not more than 1 at the time."}, status=400)
 
-    if not (0 <= rating_value <= 10):
-        return Response({"error": "El rating debe ser entre 0 y 10."}, status=400)
+    if not (0 <= int(rating_value) <= 10):
+        return JsonResponse({"error": "Rating must be between 0 and 10."}, status=400)
 
     user = User.objects.get(pk=user_id)
-    rating = Rating.objects.create(user=user, game_id=game_id, player_id=player_id, team_id=team_id, rating=rating_value)
+    rating = Rating.objects.update_or_create(user=user, game_id=game_id, player_id=player_id, team_id=team_id, rating=rating_value)[0]
     rating.save()
 
-    return Response({"message": "Rating successfully created."}, status=201)
+    return JsonResponse({"message": "Rating successfully created."}, status=201)
 
 
 

@@ -39,7 +39,7 @@ urlpatterns = [
     path('logout/', user.log_out, name='logout'),
     #rating
     path('ratings', rating.get_ratings, name='ratings_list'),
-    path('create-rating', rating.rate, name='create_rating'), #post
+    path('createRating', rating.rate, name='create_rating'), #post
     #games
     path('gamesByDate',games.get_games_by_date, name='gamesDate'),
     path('game/<str:game_id>/', games.get_game_details, name='game'),
