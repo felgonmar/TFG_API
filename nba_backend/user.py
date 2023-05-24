@@ -3,7 +3,8 @@ from django.contrib.auth.hashers import check_password
 from .models import User
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 #delete this if we want to deploy in prod
 @csrf_exempt
@@ -27,17 +28,29 @@ def login(request):
     
     user = User.objects.filter(email=email).first()
     if user is None:
-        # El usuario no existe
-        return HttpResponse("Usuario no encontrado", status=404)
+       
+        return HttpResponse("User not found", status=404)
 
     if check_password(password, user.password_hash):
-        # La contraseña es correcta
+        
         request.session['user_id'] = user.id
-        return HttpResponse("Inicio de sesión exitoso", status=200)
+        return HttpResponse("Successfully logged in", status=200)
     else:
-        # La contraseña es incorrecta
-        return HttpResponse("Contraseña incorrecta", status=401)
+        
+        return HttpResponse("Wrong password", status=401)
 
 def log_out(request):
     logout(request)
     return HttpResponse("User logged out successfully")
+
+@login_required
+def get_user_data(request):
+    user = request.user
+    user_data = {
+        'id': user.id,
+        'email': user.email,
+        'name': user.name,
+        'last_name': user.last_name,
+        'full_name': user.full_name
+    }
+    return JsonResponse(user_data)

@@ -18,6 +18,9 @@ class User(models.Model):
     def __str__(self) -> str:
         return self.full_name
     
+    def is_authenticated(self):
+        return True
+    
 class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     game_id = models.IntegerField(null=True, blank=True)

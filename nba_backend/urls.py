@@ -35,8 +35,9 @@ urlpatterns = [
     path('conferenceStandings', seasons.get_conference_standings, name='conference_standings'),
     #User
     path('register/', user.register, name='register'), #post
-    path('login/', user.login, name='login'), #post
+    path('accounts/login/', user.login, name='login'), #post
     path('logout/', user.log_out, name='logout'),
+    path('user/',user.get_user_data, name='get_user_data'),
     #rating
     path('ratings', rating.get_ratings, name='ratings_list'),
     path('createRating', rating.rate, name='create_rating'), #post
