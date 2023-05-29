@@ -3,6 +3,7 @@ from nba_api.stats.endpoints import leaguestandings
 from json import JSONDecodeError
 from django.http import JsonResponse
 
+
 #TODO: Sort 
 def get_standings(request):
     try:
@@ -32,3 +33,9 @@ def get_conference_standings(request):
         return JsonResponse({'West':west_list_sorted,'East':east_list_sorted})
     except:
         return JSONDecodeError({'error': 'Invalid season id'}, status=400)
+    
+    
+def get_all_seasons(request):
+     
+    return JsonResponse({'seasonList':[f"{year}-{str(year+1)[-2:]}" for year in range(1980, 2022+1)][::-1]})
+

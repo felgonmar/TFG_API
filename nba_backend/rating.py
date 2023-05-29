@@ -38,4 +38,33 @@ def get_ratings(request):
         ratings_list = [model_to_dict(rating) for rating in ratings]  
         return JsonResponse(ratings_list, safe=False)  
     except Exception as e:
-        return JsonResponse({"error": str(e)})
+        return JsonResponse({"error": str(e)}, status=400)
+    
+def get_user_rating(request):
+    try:
+        target_type = request.GET.get('type')  
+        target_id = request.GET.get('id')  
+        user_id = request.GET.get('id')  
+        if target_type not in ['player', 'game', 'team']:
+            return JsonResponse({'error': 'no type provided'}, status=400)
+        else:
+            rate_type = switch_target(target_type)
+            kwargs = {
+                '{}'.format(rate_type): target_id,
+                'user_id': user_id
+            }
+            rating = Rating.objects.filter(**kwargs).first()
+        
+            if rating:
+                return JsonResponse({'rating': rating.rating})  
+            else:
+                return JsonResponse({'error': 'No rating found'},status=404)
+
+    except Exception as e: 
+        return JsonResponse({"error":  str(e)}, status=400)   
+
+
+def switch_target(target):
+    return {'player': 'player_id',
+            'game':'game_id',
+            'team':'team_id'}.get(target, None)

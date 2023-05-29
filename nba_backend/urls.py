@@ -33,6 +33,7 @@ urlpatterns = [
     #Seasons
     path('standings', seasons.get_standings, name='standings'),
     path('conferenceStandings', seasons.get_conference_standings, name='conference_standings'),
+    path('allSeasons', seasons.get_all_seasons),
     #User
     path('register/', user.register, name='register'), #post
     path('accounts/login/', user.login, name='login'), #post
@@ -41,6 +42,7 @@ urlpatterns = [
     #rating
     path('ratings', rating.get_ratings, name='ratings_list'),
     path('createRating', rating.rate, name='create_rating'), #post
+    path('userRate', rating.get_user_rating, name='user_rating'),
     #games
     path('gamesByDate',games.get_games_by_date, name='gamesDate'),
     path('game/<str:game_id>/', games.get_game_details, name='game'),

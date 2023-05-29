@@ -41,7 +41,7 @@ def get_advanced_stats(request,player_id):
                 player_dashboard[key][player_dashboard[key].index(item)]['PER']= get_per(player_dashboard[key][player_dashboard[key].index(item)])
                 player_dashboard[key][player_dashboard[key].index(item)]['EFG'] = get_efg(player_dashboard[key][player_dashboard[key].index(item)])
                 player_dashboard[key][player_dashboard[key].index(item)]['TS']=get_ts(player_dashboard[key][player_dashboard[key].index(item)])
-                player_dashboard[key][player_dashboard[key].index(item)]['TS']=get_win_shares(player_dashboard[key][player_dashboard[key].index(item)])
+                player_dashboard[key][player_dashboard[key].index(item)]['WS']=get_win_shares(player_dashboard[key][player_dashboard[key].index(item)])
         return JsonResponse(player_dashboard)
     except JSONDecodeError:
         return JsonResponse({'error':'Invalid player or season'}, status=400)   
