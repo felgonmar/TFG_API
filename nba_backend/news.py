@@ -8,19 +8,19 @@ uirobotPath ="C:\\Users\\Félix GM\\AppData\\Local\\Programs\\UiPath\\Studio\\Ui
 
 def get_news(request):
     try:
-        #uiPathTrigger()
+        # uiPathTrigger()
         df = pd.read_csv('nba_backend\\nba_backend\\assets\\nbaNews.csv')
 
         news = df.to_dict(orient='records')
         
         print(news)
         return JsonResponse({'news':news})
-    except:
-        JsonResponse('error getting the news', status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
 
 
 def uiPathTrigger(): 
-
+  
 
     subprocess.run([uirobotPath, '-file', "C:\\Users\\Félix GM\\Documents\\UiPath\\ProcesoEnBlanco\\Main.xaml"], check=True)
 

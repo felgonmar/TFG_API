@@ -4,7 +4,7 @@ from nba_api.stats.endpoints import commonplayerinfo,playercareerstats, playerco
 from nba_api.stats.library.parameters import SeasonAll
 from json import JSONDecodeError
 from . import utils
-
+from requests.exceptions import Timeout
 
 def player_common_info(request, player_id):
     try:
@@ -30,9 +30,7 @@ def get_advanced_stats(request,player_id):
         player_dashboard = playerdashboardbygeneralsplits.PlayerDashboardByGeneralSplits(player_id, season=season_id, timeout=60).get_normalized_dict()
        
         for key in player_dashboard:
-            print(key)
             for item in player_dashboard[key]:
-                print(item)
                 #def rat is a dense call, only for the first one
                 if key == 'OverallPlayerDashboard':
                     player_dashboard[key][player_dashboard[key].index(item)]['OFF_RAT'] =get_off_rat(player_dashboard[key][player_dashboard[key].index(item)])
@@ -75,7 +73,7 @@ def playerFinder(request,name):
                 player['commonPlayerInfo']=get_common_player_info(player['id'])['CommonPlayerInfo'][0]
             return JsonResponse({'players': active_players})
     except JSONDecodeError as e:
-        return JsonResponse({'error': e}, status=400)
+        return JsonResponse({'error': str(e)}, status=400)
     
 def get_per(player_data):
     """
@@ -175,38 +173,45 @@ def get_def_rat(player_stats, player_id, season_id): #Defensive Rating = 100 * (
 
 
 def get_opponent_stats(player_id, season):
+    try:
     # Obtén todos los juegos del jugador en una temporada
-    gamelog = playergamelog.PlayerGameLog(player_id, season)
-    games = gamelog.get_data_frames()[0]
-    
-    opponent_stats = {'PTS': 0, 'FGA': 0, 'FTA': 0, 'TOV': 0}
-
-    # Para cada juego, obtén las estadísticas del equipo oponente
-    for i in range(len(games)):
-        game_id = games['Game_ID'][i]
-        matchup = games['MATCHUP'][i]
-
-        # Dividir la cadena de emparejamiento para obtener los equipos
-        teams = matchup.split(' ')
-        if teams[1] == 'vs.':
-            opponent_team_abbreviation = teams[2]
-        else: # El jugador está jugando fuera, por lo que el oponente es el primer equipo
-            opponent_team_abbreviation = teams[0]
-
-        boxscore = boxscoretraditionalv2.BoxScoreTraditionalV2(game_id)
-        team_stats = boxscore.get_data_frames()[1]
-
-        # Identifica qué fila de team_stats corresponde al equipo oponente
-        opponent_row = team_stats[team_stats['TEAM_ABBREVIATION'] == opponent_team_abbreviation]
-
-        # Suma las estadísticas del equipo oponente a las totales
-        opponent_stats['PTS'] += opponent_row['PTS'].values[0]
-        opponent_stats['FGA'] += opponent_row['FGA'].values[0]
-        opponent_stats['FTA'] += opponent_row['FTA'].values[0]
-        opponent_stats['TOV'] += opponent_row['TO'].values[0]
+        gamelog = playergamelog.PlayerGameLog(player_id, season, timeout=60)
+        games = gamelog.get_data_frames()[0]
         
-    return opponent_stats
+        opponent_stats = {'PTS': 0, 'FGA': 0, 'FTA': 0, 'TOV': 0}
 
+        # Para cada juego, obtén las estadísticas del equipo oponente
+        for i in range(len(games)):
+            game_id = games['Game_ID'][i]
+            matchup = games['MATCHUP'][i]
+
+            # Dividir la cadena de emparejamiento para obtener los equipos
+            teams = matchup.split(' ')
+            if teams[1] == 'vs.':
+                opponent_team_abbreviation = teams[2]
+            else: # El jugador está jugando fuera, por lo que el oponente es el primer equipo
+                opponent_team_abbreviation = teams[0]
+            try:
+                boxscore = boxscoretraditionalv2.BoxScoreTraditionalV2(game_id, timeout=120)
+            except Timeout:
+                print('The request timed out, retrying...')
+                boxscore = boxscoretraditionalv2.BoxScoreTraditionalV2(game_id, timeout=120)
+            team_stats = boxscore.get_data_frames()[1]
+
+            # Identifica qué fila de team_stats corresponde al equipo oponente
+            opponent_row = team_stats[team_stats['TEAM_ABBREVIATION'] == opponent_team_abbreviation]
+
+            # Suma las estadísticas del equipo oponente a las totales
+            opponent_stats['PTS'] += opponent_row['PTS'].values[0]
+            opponent_stats['FGA'] += opponent_row['FGA'].values[0]
+            opponent_stats['FTA'] += opponent_row['FTA'].values[0]
+            opponent_stats['TOV'] += opponent_row['TO'].values[0]
+            
+        return opponent_stats
+    except Exception as e:
+        print(str(e))
+        return opponent_stats
+    
 
 def get_common_player_info(player_id):
     try:
