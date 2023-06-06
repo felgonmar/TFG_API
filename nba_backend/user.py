@@ -11,14 +11,28 @@ import json
 @csrf_exempt
 def register(request):
     if request.method == 'POST':
-        email = request.POST.get('email')
-        name = request.POST.get('name', '')
-        last_name = request.POST.get('last_name', '')
+        body_unicode = request.body.decode('utf-8')
+
+        try:
+            body = json.loads(body_unicode)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+        email = body.get('email')
+        name = body.get('name', '')
+        last_name = body.get('last_name', '')
         full_name = name + ' ' + last_name
-        password = request.POST.get('password')
+        password = body.get('password')
         user = User(full_name=full_name, email=email, name=name, last_name=last_name, password_hash=password)
         user.save()
-        return HttpResponse("User registered successfully")
+        user_data = {
+                'id': user.id,
+                'email': user.email,
+                'name': user.name,
+                'last_name': user.last_name,
+                'full_name': user.full_name
+            }
+        return JsonResponse({'Response':"User registered successfully", 'user':user_data})
     else:
         return HttpResponse("Invalid request")
 

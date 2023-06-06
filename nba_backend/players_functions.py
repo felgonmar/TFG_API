@@ -28,19 +28,29 @@ def get_advanced_stats(request,player_id):
     try:
         season_id = request.GET.get('seasonId', SeasonAll.default)
         player_dashboard = playerdashboardbygeneralsplits.PlayerDashboardByGeneralSplits(player_id, season=season_id, timeout=60).get_normalized_dict()
-       
-        for key in player_dashboard:
-            for item in player_dashboard[key]:
-                #def rat is a dense call, only for the first one
-                if key == 'OverallPlayerDashboard':
-                    player_dashboard[key][player_dashboard[key].index(item)]['OFF_RAT'] =get_off_rat(player_dashboard[key][player_dashboard[key].index(item)])
-                    player_dashboard[key][player_dashboard[key].index(item)]['DEF_RAT'] =get_def_rat(player_dashboard[key][player_dashboard[key].index(item)], player_id, season_id)
-                    player_dashboard[key][player_dashboard[key].index(item)]['NET_RAT'] = player_dashboard[key][player_dashboard[key].index(item)]['OFF_RAT'] - player_dashboard[key][player_dashboard[key].index(item)]['DEF_RAT']
-                player_dashboard[key][player_dashboard[key].index(item)]['PER']= get_per(player_dashboard[key][player_dashboard[key].index(item)])
-                player_dashboard[key][player_dashboard[key].index(item)]['EFG'] = get_efg(player_dashboard[key][player_dashboard[key].index(item)])
-                player_dashboard[key][player_dashboard[key].index(item)]['TS']=get_ts(player_dashboard[key][player_dashboard[key].index(item)])
-                player_dashboard[key][player_dashboard[key].index(item)]['WS']=get_win_shares(player_dashboard[key][player_dashboard[key].index(item)])
-        return JsonResponse(player_dashboard)
+       #TODO: add some fields else
+        response = player_dashboard['OverallPlayerDashboard'][0]
+        response['OFF_RAT'] =get_off_rat(response)
+        response['DEF_RAT'] =get_def_rat(response, player_id, season_id)
+        response['NET_RAT'] =response['OFF_RAT'] -response['DEF_RAT']
+        response['PER']= get_per(response)
+        response['EFG'] = get_efg(response)
+        response['TS']=get_ts(response)
+        response['WS']=get_win_shares(response)
+        
+        
+        # for key in player_dashboard:
+        #     for item in player_dashboard[key]:
+        #         #def rat is a dense call, only for the first one
+        #         # if key == 'OverallPlayerDashboard':
+        #         #     player_dashboard[key][player_dashboard[key].index(item)]['OFF_RAT'] =get_off_rat(player_dashboard[key][player_dashboard[key].index(item)])
+        #         #     player_dashboard[key][player_dashboard[key].index(item)]['DEF_RAT'] =get_def_rat(player_dashboard[key][player_dashboard[key].index(item)], player_id, season_id)
+        #         #     player_dashboard[key][player_dashboard[key].index(item)]['NET_RAT'] = player_dashboard[key][player_dashboard[key].index(item)]['OFF_RAT'] - player_dashboard[key][player_dashboard[key].index(item)]['DEF_RAT']
+        #         # player_dashboard[key][player_dashboard[key].index(item)]['PER']= get_per(player_dashboard[key][player_dashboard[key].index(item)])
+        #         # player_dashboard[key][player_dashboard[key].index(item)]['EFG'] = get_efg(player_dashboard[key][player_dashboard[key].index(item)])
+        #         # player_dashboard[key][player_dashboard[key].index(item)]['TS']=get_ts(player_dashboard[key][player_dashboard[key].index(item)])
+        #         player_dashboard[key][player_dashboard[key].index(item)]['WS']=get_win_shares(player_dashboard[key][player_dashboard[key].index(item)])
+        return JsonResponse(response)
     except JSONDecodeError:
         return JsonResponse({'error':'Invalid player or season'}, status=400)   
      
@@ -114,8 +124,10 @@ def get_win_shares(player_stats):
     defensive_contribution = stl + blk - tov
     
     approximate_ws = (offensive_contribution + defensive_contribution) / 10
-    
-    return approximate_ws / team_wins
+    if(team_wins !=0):
+        return approximate_ws / team_wins
+    else:
+        return 0
 
 
 def get_efg(player_stats): # effective Field Goal percentage (FG + 0.5 * 3P) / FGA.

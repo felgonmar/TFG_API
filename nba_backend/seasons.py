@@ -4,7 +4,6 @@ from json import JSONDecodeError
 from django.http import JsonResponse
 
 
-#TODO: Sort 
 def get_standings(request):
     try:
         season_id = request.GET.get('season_id', SeasonAll.default)
