@@ -24,6 +24,7 @@ urlpatterns = [
     #Teams url
     path('teams/',  teams_functions.team_list, name='team_list'),
     path('teams/<int:team_id>/players/', teams_functions.team_players, name='team_players'),
+    path('historicalLeaders/<int:team_id>/',  teams_functions.get_historical_leaders, name='historical_leaders'),
     #players url
     path('playerStats/<int:player_id>/', players_functions.player_stats, name='player_stats'),
     path('playerCompare/<int:player_id>/<int:vs_player_id>', players_functions.playerCompare, name='player_compare'),
