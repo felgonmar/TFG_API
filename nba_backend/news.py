@@ -5,6 +5,7 @@ import subprocess
 from django.http import JsonResponse
 
 uirobotPath ="C:\\Users\\Félix GM\\AppData\\Local\\Programs\\UiPath\\Studio\\UiRobot.exe"
+mainFile = "C:\\Users\\Félix GM\\Documents\\UiPath\\ProcesoEnBlanco\\Main.xaml"
 
 def get_news(request):
     try:
@@ -22,6 +23,6 @@ def get_news(request):
 def uiPathTrigger(): 
   
 
-    subprocess.run([uirobotPath, '-file', "C:\\Users\\Félix GM\\Documents\\UiPath\\ProcesoEnBlanco\\Main.xaml"], check=True)
+    subprocess.run([uirobotPath, '-file', mainFile], check=True)
 
     

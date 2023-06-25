@@ -186,22 +186,22 @@ def get_def_rat(player_stats, player_id, season_id): #Defensive Rating = 100 * (
 
 def get_opponent_stats(player_id, season):
     try:
-    # Obtén todos los juegos del jugador en una temporada
+        #get all the games for the season
         gamelog = playergamelog.PlayerGameLog(player_id, season, timeout=60)
         games = gamelog.get_data_frames()[0]
         
         opponent_stats = {'PTS': 0, 'FGA': 0, 'FTA': 0, 'TOV': 0}
 
-        # Para cada juego, obtén las estadísticas del equipo oponente
+        #for each game, get the opponent stats
         for i in range(len(games)):
             game_id = games['Game_ID'][i]
             matchup = games['MATCHUP'][i]
 
-            # Dividir la cadena de emparejamiento para obtener los equipos
+            
             teams = matchup.split(' ')
             if teams[1] == 'vs.':
                 opponent_team_abbreviation = teams[2]
-            else: # El jugador está jugando fuera, por lo que el oponente es el primer equipo
+            else: # Player is playing outside
                 opponent_team_abbreviation = teams[0]
             try:
                 boxscore = boxscoretraditionalv2.BoxScoreTraditionalV2(game_id, timeout=120)
@@ -210,10 +210,10 @@ def get_opponent_stats(player_id, season):
                 boxscore = boxscoretraditionalv2.BoxScoreTraditionalV2(game_id, timeout=120)
             team_stats = boxscore.get_data_frames()[1]
 
-            # Identifica qué fila de team_stats corresponde al equipo oponente
+            
             opponent_row = team_stats[team_stats['TEAM_ABBREVIATION'] == opponent_team_abbreviation]
 
-            # Suma las estadísticas del equipo oponente a las totales
+            #get all the stadistics
             opponent_stats['PTS'] += opponent_row['PTS'].values[0]
             opponent_stats['FGA'] += opponent_row['FGA'].values[0]
             opponent_stats['FTA'] += opponent_row['FTA'].values[0]

@@ -1,0 +1,126 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" mva:VisualBasic.Settings="{x:Null}" sap:VirtualizedContainerService.HintSize="592,1068" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:uix="http://schemas.uipath.com/workflow/activities/uix" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>UiPath.Word</x:String>
+      <x:String>UiPath.Shared.Activities.Business</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>UiPath.Word.Activities</x:String>
+      <x:String>System.Activities.DynamicUpdate</x:String>
+      <x:String>System.Reflection</x:String>
+      <x:String>System.Runtime.InteropServices</x:String>
+      <x:String>System.Security</x:String>
+      <x:String>UiPath.UIAutomationNext.Enums</x:String>
+      <x:String>UiPath.UIAutomationCore.Contracts</x:String>
+      <x:String>UiPath.UIAutomationNext.Activities</x:String>
+      <x:String>UiPath.Platform.ObjectLibrary</x:String>
+      <x:String>System.ComponentModel</x:String>
+      <x:String>UiPath.Shared.Activities</x:String>
+      <x:String>System.Runtime.Serialization</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>UiPath.UIAutomationNext.Models.ExtractData</x:String>
+      <x:String>UiPath.UIAutomationNext.Contracts</x:String>
+      <x:String>UiPath.CSV</x:String>
+      <x:String>UiPath.CSV.Activities</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>UiPath.Word</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Mail.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>UiPath.OCR.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Word.Activities</AssemblyReference>
+      <AssemblyReference>System.Reflection.Metadata</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>Microsoft.Bcl.AsyncInterfaces</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationNext</AssemblyReference>
+      <AssemblyReference>UiPath.UIAutomationNext.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.Platform</AssemblyReference>
+      <AssemblyReference>UiPath.Studio.Constants</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Sequence" sap:VirtualizedContainerService.HintSize="592,1003.33333333333" sap2010:WorkflowViewState.IdRef="Sequence_7">
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <uix:NApplicationCard AttachMode="ByInstance" DisplayName="Use Browser Edge: Nueva pestaña" sap:VirtualizedContainerService.HintSize="530,892.666666666667" sap2010:WorkflowViewState.IdRef="NApplicationCard_3" InteractionMode="DebuggerApi" IsIncognito="False" ScopeGuid="ca8710b4-6d87-4f40-a137-72183920ecc3" Version="V1">
+      <uix:NApplicationCard.Body>
+        <ActivityAction x:TypeArguments="x:Object">
+          <ActivityAction.Argument>
+            <DelegateInArgument x:TypeArguments="x:Object" Name="WSSessionData" />
+          </ActivityAction.Argument>
+          <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="496,673.333333333333" sap2010:WorkflowViewState.IdRef="Sequence_6">
+            <Sequence.Variables>
+              <Variable x:TypeArguments="sd:DataTable" Name="newsData" />
+            </Sequence.Variables>
+            <sap:WorkflowViewStateService.ViewState>
+              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+              </scg:Dictionary>
+            </sap:WorkflowViewStateService.ViewState>
+            <uix:NClick ClickType="Single" DisplayName="Clic 'Load more'" sap:VirtualizedContainerService.HintSize="434,159.333333333333" sap2010:WorkflowViewState.IdRef="NClick_1" KeyModifiers="None" MouseButton="Left" ScopeIdentifier="ca8710b4-6d87-4f40-a137-72183920ecc3" Version="V1">
+              <uix:NClick.Target>
+                <uix:TargetAnchorable BrowserURL="https://www.nba.com/news/category/top-stories" DesignTimeRectangle="321, 550, 101, 50" ElementType="Button" FriendlyName="'Load more'" FullSelectorArgument="&lt;webctrl aaname='Load more' parentid='__next' tag='BUTTON' /&gt;" FuzzySelectorArgument="&lt;webctrl aaname='Load more' parentid='__next' tag='BUTTON' type='' check:text='Load more' /&gt;" Guid="5745e2c1-b028-4397-bb27-7d608f3373d3" ImageBase64="iVBORw0KGgoAAAANSUhEUgAAAGkAAAA2CAYAAADEWrcYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAPaSURBVHhe7ZzNSxtBGIf7bwi9FHvrwVMgp+JFBdGbHgpKC+mhbA6SHMScJFBKQAoBCXuRgAQKAQlIEUMJipTkkJqABEHUizkICfSwIGHBw68z2dnNbrL5wGw+prwDD2T3nZl9930y+3HZV41GA8R0Q5IkwCGp+OcSmx8/483bd5h5PUuMGV53Xn/uwe7FksQDJGc64B7soixJ3KDbAGIycB8dkmgVTRfcR4ckt47EZCFJEkCSJIAkSQBJkgCSJAEkSQJIkgSQJAkgSRJAkiSAJEkASZIAkiQBI5G0EE4gmUwhGQ24xj1FvYbRrqG6xf8DRiJJOa0bdbs6cI17Ckl6GSTJWyYmae7DLn6clXFZKuAkuYt1nz2+CEXN4neJxfNZqMFFW8w2Nn+MaLqXpFWE4+yym0wg8ikE9bTAjneOJJuvNUcW8S9+x7iuuS3vIM4v4/EdBL4es/zSiHSMKSOXbj+f4ZiIpLlwFjWjR6vVswg3T2wN6pUudppNR2V/1Ri/nEClPdxsbpJCOBGpOJquQbPPoZcRE0XtmdtWe8w4ZrcxiiOXlzMBSQoyj0ZYv0pB2U7jVhTs9pCJiBaYEt6qyAQDiOdFUMy1cVQ1tvV7ZLZDiOVNC70l6TdphLezeDA2O7Yr+wPkZpf0956tGr6SVpG8MXZpxQMowZT4E+m43GvP52WMX5LvAJVmUEMubOyLXpgiEra+i1jZDCB2oYmYMVes6JTW+57UklRRB9jul5sliR3Lupyxld3c1xqjXjV3oHYaEn2GY/ySrBOt42TLrb8f4aN7sZpsTczVUQAvJfXLzS7JOoYptrPJKynYpxCRc/af5K2OHHvPal9JpiT94psxn5eS+uXWU5KO2o3x4GCS2/fmPXH8kl5/x6V5zY7zpyq/o/DKTzFW3Hjb5wr/EtLuUljg83kpqU9u7pLMMeK+1dznRyCoYM7qMxyjldTemoX3t+4rzxpqj6Lo/JoeYeP3yuJSp+GhdI2a6GpJseKsx2Md2rPY8ERSn9xcJc0icmb206FVq6g98Tlaq3FYJiCJ9fHtIHNnlpo1VpDKofnPcz6C16pirqcCoiIeL5pFYXEusvnLC0mMXrl1kTTjU6CWWjnxpt0di1eK4RmJpIGZX8PG5hreu8TmljawvuR8ybTTLz40PXLrim8V6+yJdGXeJTYEk5VEDARJkgCSJAEkSQJIkgSQJAkgSRJAkiSAJEkASZIAkiQBJEkCSJIEkCQJIEkS0CGJPlszXbh+toY+ADVduH4Aij6lNj1wD66fUjNFcYMkazLwuvP62wVxHJKI6YQkTT0N/AN6hLzYlqzdIgAAAABJRU5ErkJggg==" InformativeScreenshot="c7c91b39d31870dd46a5a04c9d52e058.png" ScopeSelectorArgument="&lt;html app='msedge.exe' title='Top Stories | NBA.com' /&gt;" SearchSteps="FuzzySelector, Image" />
+              </uix:NClick.Target>
+            </uix:NClick>
+            <uix:NExtractData AppendResults="False" ContinueOnError="True" DataTable="[newsData]" DisplayName="Extract Table Data" ExtractDataSettings="&lt;Table xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema' Type='Structured'&gt;&#xA;&#x9;&lt;Column xsi:type='DataColumn' ReferenceName='Column0' Name='Title'&gt;&#xA;&#x9;&#x9;&lt;Format xsi:type='TextColumnFormat' /&gt;&#xA;&#x9;&lt;/Column&gt;&#xA;&#x9;&lt;Column xsi:type='DataColumn' ReferenceName='Column1' Name='URL'&gt;&#xA;&#x9;&#x9;&lt;Format xsi:type='TextColumnFormat' /&gt;&#xA;&#x9;&lt;/Column&gt;&#xA;&#x9;&lt;Column xsi:type='DataColumn' ReferenceName='Column2' Name='Description'&gt;&#xA;&#x9;&#x9;&lt;Format xsi:type='TextColumnFormat' /&gt;&#xA;&#x9;&lt;/Column&gt;&#xA;&#x9;&lt;Column xsi:type='DataColumn' ReferenceName='Column4' Name='Date'&gt;&#xA;&#x9;&#x9;&lt;Format xsi:type='TextColumnFormat' /&gt;&#xA;&#x9;&lt;/Column&gt;&#xA;&lt;/Table&gt;" ExtractMetadata="&lt;extract&gt;&lt;row exact='1'&gt;&lt;webctrl tag='div' idx='2' /&gt;&lt;webctrl tag='div' idx='2' /&gt;&lt;webctrl tag='div' idx='2' /&gt;&lt;webctrl tag='div' idx='2' /&gt;&lt;webctrl tag='div' idx='1' /&gt;&lt;webctrl tag='ul' idx='1' /&gt;&lt;webctrl tag='li' /&gt;&lt;webctrl tag='div' idx='1' /&gt;&lt;webctrl tag='article' idx='1' /&gt;&lt;webctrl tag='div' idx='1' /&gt;&lt;/row&gt;&lt;column exact='1' name='Column0' attr='text' name2='Column1' attr2='href'&gt;&lt;webctrl tag='div' idx='2' /&gt;&lt;webctrl tag='div' idx='2' /&gt;&lt;webctrl tag='div' idx='2' /&gt;&lt;webctrl tag='div' idx='2' /&gt;&lt;webctrl tag='div' idx='1' /&gt;&lt;webctrl tag='ul' idx='1' /&gt;&lt;webctrl tag='li' /&gt;&lt;webctrl tag='div' idx='1' /&gt;&lt;webctrl tag='article' idx='1' /&gt;&lt;webctrl tag='div' idx='1' /&gt;&lt;webctrl tag='div' idx='1' /&gt;&lt;webctrl tag='a' idx='1' /&gt;&lt;webctrl tag='header' idx='1' /&gt;&lt;webctrl tag='h3' idx='1' /&gt;&lt;webctrl tag='span' idx='1' /&gt;&lt;/column&gt;&lt;column exact='1' name='Column2' attr='text'&gt;&lt;webctrl tag='div' idx='2' /&gt;&lt;webctrl tag='div' idx='2' /&gt;&lt;webctrl tag='div' idx='2' /&gt;&lt;webctrl tag='div' idx='2' /&gt;&lt;webctrl tag='div' idx='1' /&gt;&lt;webctrl tag='ul' idx='1' /&gt;&lt;webctrl tag='li' /&gt;&lt;webctrl tag='div' idx='1' /&gt;&lt;webctrl tag='article' idx='1' /&gt;&lt;webctrl tag='div' idx='1' /&gt;&lt;webctrl tag='div' idx='1' /&gt;&lt;webctrl tag='a' idx='1' /&gt;&lt;webctrl tag='header' idx='1' /&gt;&lt;webctrl tag='p' idx='1' /&gt;&lt;webctrl tag='span' idx='1' /&gt;&lt;/column&gt;&lt;column exact='1' name='Column4' attr='text'&gt;&lt;webctrl tag='div' idx='2' /&gt;&lt;webctrl tag='div' idx='2' /&gt;&lt;webctrl tag='div' idx='2' /&gt;&lt;webctrl tag='div' idx='2' /&gt;&lt;webctrl tag='div' idx='1' /&gt;&lt;webctrl tag='ul' idx='1' /&gt;&lt;webctrl tag='li' /&gt;&lt;webctrl tag='div' idx='1' /&gt;&lt;webctrl tag='article' idx='1' /&gt;&lt;webctrl tag='div' idx='1' /&gt;&lt;webctrl tag='div' idx='2' /&gt;&lt;webctrl tag='a' idx='1' /&gt;&lt;webctrl tag='div' idx='1' /&gt;&lt;/column&gt;&lt;/extract&gt;" sap:VirtualizedContainerService.HintSize="434,160" sap2010:WorkflowViewState.IdRef="NExtractData_2" LimitExtractionTo="Rows" MaximumResults="0" ScopeIdentifier="ca8710b4-6d87-4f40-a137-72183920ecc3" Version="V1">
+              <uix:NExtractData.Target>
+                <uix:TargetAnchorable DesignTimeRectangle="8, 122, 1905, 2388" FriendlyName="'var _esi'" FullSelectorArgument="&lt;webctrl tag='DIV' /&gt;" Guid="6ef1fe10-2d1e-4a95-a3d2-b5eaceb311a0" InformativeScreenshot="7d2fc6b9a8df4ad7789029d3177c1284.png" ScopeSelectorArgument="&lt;html app='msedge.exe' title='Top Stories | NBA.com' /&gt;" SearchSteps="Selector" />
+              </uix:NExtractData.Target>
+            </uix:NExtractData>
+            <ui:WriteCsvFile Encoding="{x:Null}" AddHeaders="True" DataTable="[newsData]" Delimitator="Comma" DisplayName="Write CSV" FilePath="C:\Users\Félix GM\Desktop\nba_app\nba_backend\nba_backend\assets\nbaNews.csv" sap:VirtualizedContainerService.HintSize="434,158" sap2010:WorkflowViewState.IdRef="WriteCsvFile_2" />
+          </Sequence>
+        </ActivityAction>
+      </uix:NApplicationCard.Body>
+      <uix:NApplicationCard.TargetApp>
+        <uix:TargetApp Area="-11, -11, 2182, 1390" BrowserType="Edge" IconBase64="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" InformativeScreenshot="1fb456cd446c1b00a8c291eea977c0d8.png" Selector="&lt;html app='msedge.exe' url='https://www.nba.com/news/category/top-stories' /&gt;" Url="https://www.nba.com/news/category/top-stories" />
+      </uix:NApplicationCard.TargetApp>
+    </uix:NApplicationCard>
+  </Sequence>
+</Activity>
