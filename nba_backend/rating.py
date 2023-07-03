@@ -18,7 +18,6 @@ def rate(request):
         rating_value = data.get('rating')
         comment = data.get('comment', None)
 
-        # el resto de tu código aquí
 
         if sum([bool(game_id), bool(player_id), bool(team_id)]) != 1:
             return JsonResponse({"error": "You must rate a game, player or team, but not more than 1 at the time."}, status=400)

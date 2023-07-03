@@ -25,10 +25,10 @@ def player_stats(request, player_id):
     
     
 def get_advanced_stats(request,player_id):
+    print('Getting advanced data, please wait')
     try:
         season_id = request.GET.get('seasonId', SeasonAll.default)
         player_dashboard = playerdashboardbygeneralsplits.PlayerDashboardByGeneralSplits(player_id, season=season_id, timeout=60).get_normalized_dict()
-       #TODO: add some fields else
         response = player_dashboard['OverallPlayerDashboard'][0]
         response['OFF_RAT'] =get_off_rat(response)
         response['DEF_RAT'] =get_def_rat(response, player_id, season_id)

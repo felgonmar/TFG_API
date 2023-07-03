@@ -28,7 +28,6 @@ class Rating(models.Model):
     team_id = models.IntegerField(null=True, blank=True)
     rating = models.IntegerField()
     comment = models.TextField(null=True)
-    #TODO: add uipath
 
     def save(self, *args, **kwargs):
         # checking that only 1 of the fields is written
