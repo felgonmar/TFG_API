@@ -9,7 +9,7 @@ mainFile = "C:\\Users\\Félix GM\\Documents\\UiPath\\ProcesoEnBlanco\\Main.xaml"
 
 def get_news(request):
     try:
-        # uiPathTrigger()
+        uiPathTrigger()
         df = pd.read_csv('nba_backend\\nba_backend\\assets\\nbaNews.csv')
 
         news = df.to_dict(orient='records')

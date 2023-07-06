@@ -91,17 +91,17 @@ def get_per(player_data):
     """
 
     # Extract necessary stats
-    pts = player_data.get('points', 0)
-    three_p = player_data.get('three_points_made', 0)
-    ast = player_data.get('assists', 0)
-    orb = player_data.get('offensive_rebounds', 0)
-    drb = player_data.get('defensive_rebounds', 0)
-    stl = player_data.get('steals', 0)
-    blk = player_data.get('blocks', 0)
-    to = player_data.get('turnovers', 0)
-    fta = player_data.get('free_throws_attempted', 0)
-    fga = player_data.get('field_goals_attempted', 0)
-    min_played = player_data.get('minutes_played', 1)  # avoid division by zero
+    pts = player_data.get('PTS', 0)
+    three_p = player_data.get('FG3M', 0)
+    ast = player_data.get('AST', 0)
+    orb = player_data.get('OREB', 0)
+    drb = player_data.get('DREB', 0)
+    stl = player_data.get('STL', 0)
+    blk = player_data.get('BLK', 0)
+    to = player_data.get('TOV', 0)
+    fta = player_data.get('FTA', 0)
+    fga = player_data.get('FGA', 0)
+    min_played = player_data.get('MIN', 1)  # avoid division by zero
 
     # Calculate PER
     per = (pts + three_p + 0.5*ast + 1.25*orb + drb + stl + 0.5*blk - to - 0.5*fta - 0.5*fga) / min_played
